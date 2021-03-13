@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.8"
    
 services:
   db:
@@ -7,12 +7,19 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py migrate && 
+                      python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
       - "8000:8000"
     depends_on:
       - db
+    links:
+      - db:db
+  
+  
+
